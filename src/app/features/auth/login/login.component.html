@@ -1,0 +1,72 @@
+<div class="login-container">
+  <div class="login-card">
+    <p-card header="Login" styleClass="login-form-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <!-- Email Field -->
+        <div class="field">
+          <label for="email">Email</label>
+          <input 
+            pInputText 
+            id="email" 
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.ng-invalid]="isFieldInvalid('email')"
+            class="w-full" />
+          
+          <small 
+            class="p-error" 
+            *ngIf="isFieldInvalid('email')">
+            Email is required and must be valid
+          </small>
+        </div>
+
+        <!-- Password Field -->
+        <div class="field">
+          <label for="password">Password</label>
+          <p-password 
+            formControlName="password"
+            [toggleMask]="true"
+            placeholder="Enter your password"
+            styleClass="w-full"
+            [inputStyleClass]="'w-full'"
+            [class.ng-invalid]="isFieldInvalid('password')">
+          </p-password>
+          
+          <small 
+            class="p-error" 
+            *ngIf="isFieldInvalid('password')">
+            Password is required
+          </small>
+        </div>
+
+        <!-- Error Message -->
+        <p-message 
+          *ngIf="errorMessage" 
+          severity="error" 
+          [text]="errorMessage"
+          styleClass="w-full mb-3">
+        </p-message>
+
+        <!-- Submit Button -->
+        <div class="field">
+          <p-button 
+            type="submit"
+            label="Login"
+            styleClass="w-full"
+            [loading]="isLoading"
+            [disabled]="loginForm.invalid || isLoading">
+          </p-button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center mt-3">
+          <span class="text-600">Don't have an account? </span>
+          <a routerLink="/register" class="text-primary cursor-pointer">Register here</a>
+        </div>
+
+      </form>
+    </p-card>
+  </div>
+</div>
