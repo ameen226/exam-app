@@ -1,0 +1,22 @@
+.alert-success {
+  margin-bottom: 1rem;
+}
+
+.alert-danger {
+  margin-bottom: 1rem;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+// Optional: Add some custom styling for registration form
+.form-control:focus {
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.1);
+}
+
+.btn-dark:hover {
+  background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--accent-grey) 100%);
+}

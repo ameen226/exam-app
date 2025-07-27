@@ -1,0 +1,153 @@
+<div class="bg-light">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card border-0 shadow-sm fade-in-up">
+              <div class="card-header bg-white border-bottom">
+                <h4 class="text-center mb-0 text-dark">Student Registration</h4>
+              </div>
+              <div class="card-body p-4">
+                <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+                  
+                  <!-- Name Fields -->
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input 
+                        type="text" 
+                        class="form-control"
+                        [class.is-invalid]="isFieldInvalid('firstName')"
+                        id="firstName" 
+                        formControlName="firstName"
+                        required>
+                      <div class="invalid-feedback" *ngIf="isFieldInvalid('firstName')">
+                        <div *ngIf="registrationForm.get('firstName')?.errors?.['required']">
+                          First name is required
+                        </div>
+                        <div *ngIf="registrationForm.get('firstName')?.errors?.['minlength']">
+                          First name must be at least 2 characters
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input 
+                        type="text" 
+                        class="form-control"
+                        [class.is-invalid]="isFieldInvalid('lastName')"
+                        id="lastName" 
+                        formControlName="lastName"
+                        required>
+                      <div class="invalid-feedback" *ngIf="isFieldInvalid('lastName')">
+                        <div *ngIf="registrationForm.get('lastName')?.errors?.['required']">
+                          Last name is required
+                        </div>
+                        <div *ngIf="registrationForm.get('lastName')?.errors?.['minlength']">
+                          Last name must be at least 2 characters
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Email Field -->
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input 
+                      type="email" 
+                      class="form-control"
+                      [class.is-invalid]="isFieldInvalid('email')"
+                      id="email" 
+                      formControlName="email"
+                      required>
+                    <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                      <div *ngIf="registrationForm.get('email')?.errors?.['required']">
+                        Email is required
+                      </div>
+                      <div *ngIf="registrationForm.get('email')?.errors?.['email']">
+                        Please enter a valid email address
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Password Fields -->
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="password" class="form-label">Password</label>
+                      <input 
+                        type="password" 
+                        class="form-control"
+                        [class.is-invalid]="isFieldInvalid('password')"
+                        id="password" 
+                        formControlName="password"
+                        required>
+                      <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+                        <div *ngIf="registrationForm.get('password')?.errors?.['required']">
+                          Password is required
+                        </div>
+                        <div *ngIf="registrationForm.get('password')?.errors?.['minlength']">
+                          Password must be at least 8 characters
+                        </div>
+                        <div *ngIf="registrationForm.get('password')?.errors?.['weakPassword']">
+                          Password must contain uppercase, lowercase, number, and special character
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="confirmPassword" class="form-label">Confirm Password</label>
+                      <input 
+                        type="password" 
+                        class="form-control"
+                        [class.is-invalid]="isFieldInvalid('confirmPassword') || registrationForm.errors?.['passwordsMismatch']"
+                        id="confirmPassword" 
+                        formControlName="confirmPassword"
+                        required>
+                      <div class="invalid-feedback" *ngIf="isFieldInvalid('confirmPassword') || registrationForm.errors?.['passwordsMismatch']">
+                        <div *ngIf="registrationForm.get('confirmPassword')?.errors?.['required']">
+                          Please confirm your password
+                        </div>
+                        <div *ngIf="registrationForm.errors?.['passwordsMismatch'] && !registrationForm.get('confirmPassword')?.errors?.['required']">
+                          Passwords do not match
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Success Message -->
+                  <div class="alert alert-success" *ngIf="successMessage" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ successMessage }}
+                  </div>
+
+                  <!-- Error Message -->
+                  <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ errorMessage }}
+                  </div>
+
+                  <!-- Submit Button -->
+                  <button 
+                    type="submit" 
+                    class="btn btn-dark w-100 mb-3"
+                    [disabled]="registrationForm.invalid || isLoading">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </span>
+                    {{ isLoading ? 'Registering...' : 'Register' }}
+                  </button>
+
+                  <!-- Login Link -->
+                  <div class="text-center">
+                    <a routerLink="/login" class="text-decoration-none text-muted">
+                      Already have an account? Login
+                    </a>
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
