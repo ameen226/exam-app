@@ -1,0 +1,46 @@
+<!-- dashboard.component.html -->
+<div class="container-fluid">
+  <!-- Main content -->
+  <main class="px-4">
+    <div class="d-flex justify-content-center align-items-center pt-3 pb-2 mb-4 border-bottom">
+      <h2>Dashboard</h2>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="row justify-content-center">
+      <div class="col-12">
+        <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="row justify-content-center">
+      <div class="col-12">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <div class="flex-grow-1">
+            <strong>Error:</strong> {{ error }}
+          </div>
+          <button type="button" class="btn btn-outline-danger btn-sm ms-3" (click)="retryLoadStats()">
+            Retry
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div *ngIf="!isLoading && !error" class="row justify-content-center">
+      <div class="col-lg-3 col-md-6 mb-4" *ngFor="let card of dashboardCards">
+        <div class="card stats-card">
+          <div class="card-body" [ngClass]="card.type">
+            <h3>{{ formatNumber(card.value) }}</h3>
+            <p>{{ card.title }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

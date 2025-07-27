@@ -1,0 +1,103 @@
+.stats-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-body {
+    padding: 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+
+    h3 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 0;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    // Success variant for passed exams
+    &.success {
+      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+    }
+
+    // Danger variant for failed exams
+    &.danger {
+      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    }
+
+    // Default variant styling
+    &.default {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  }
+}
+
+// Loading spinner container
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+// Error alert styling
+.alert-danger {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+// Page title styling
+h2 {
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+// Border bottom styling
+.border-bottom {
+  border-color: #e9ecef !important;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .stats-card .card-body {
+    padding: 1.5rem;
+    
+    h3 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .px-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .stats-card .card-body {
+    padding: 1.25rem;
+    
+    h3 {
+      font-size: 1.75rem;
+    }
+  }
+}
