@@ -1,72 +1,72 @@
-<div class="login-container">
-  <div class="login-card">
-    <p-card header="Login" styleClass="login-form-card">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+      <div class="row w-100 justify-content-center">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+              <h4 class="text-center mb-0 text-dark">Login</h4>
+            </div>
+            <div class="card-body p-4">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                
+                <!-- Email Field -->
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input 
+                    type="email" 
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('email')"
+                    id="email" 
+                    formControlName="email"
+                    required>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+                    <div *ngIf="loginForm.get('email')?.errors?.['required']">
+                      Email is required
+                    </div>
+                    <div *ngIf="loginForm.get('email')?.errors?.['email']">
+                      Please enter a valid email address
+                    </div>
+                  </div>
+                </div>
 
-        <!-- Email Field -->
-        <div class="field">
-          <label for="email">Email</label>
-          <input 
-            pInputText 
-            id="email" 
-            type="email"
-            formControlName="email"
-            placeholder="Enter your email"
-            [class.ng-invalid]="isFieldInvalid('email')"
-            class="w-full" />
-          
-          <small 
-            class="p-error" 
-            *ngIf="isFieldInvalid('email')">
-            Email is required and must be valid
-          </small>
+                <!-- Password Field -->
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input 
+                    type="password" 
+                    class="form-control"
+                    [class.is-invalid]="isFieldInvalid('password')"
+                    id="password" 
+                    formControlName="password"
+                    required>
+                  <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
+                    Password is required
+                  </div>
+                </div>
+
+                <!-- Error Alert -->
+                <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+                  {{ errorMessage }}
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                  type="submit" 
+                  class="btn btn-dark w-100 mb-3"
+                  [disabled]="loginForm.invalid || isLoading">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </span>
+                  {{ isLoading ? 'Logging in...' : 'Login' }}
+                </button>
+
+                <!-- Register Link -->
+                <div class="text-center">
+                  <a routerLink="/register" class="text-decoration-none text-muted">Register as Student</a>
+                </div>
+
+              </form>
+            </div>
+          </div>
         </div>
-
-        <!-- Password Field -->
-        <div class="field">
-          <label for="password">Password</label>
-          <p-password 
-            formControlName="password"
-            [toggleMask]="true"
-            placeholder="Enter your password"
-            styleClass="w-full"
-            [inputStyleClass]="'w-full'"
-            [class.ng-invalid]="isFieldInvalid('password')">
-          </p-password>
-          
-          <small 
-            class="p-error" 
-            *ngIf="isFieldInvalid('password')">
-            Password is required
-          </small>
-        </div>
-
-        <!-- Error Message -->
-        <p-message 
-          *ngIf="errorMessage" 
-          severity="error" 
-          [text]="errorMessage"
-          styleClass="w-full mb-3">
-        </p-message>
-
-        <!-- Submit Button -->
-        <div class="field">
-          <p-button 
-            type="submit"
-            label="Login"
-            styleClass="w-full"
-            [loading]="isLoading"
-            [disabled]="loginForm.invalid || isLoading">
-          </p-button>
-        </div>
-
-        <!-- Register Link -->
-        <div class="text-center mt-3">
-          <span class="text-600">Don't have an account? </span>
-          <a routerLink="/register" class="text-primary cursor-pointer">Register here</a>
-        </div>
-
-      </form>
-    </p-card>
-  </div>
-</div>
+      </div>
+    </div>

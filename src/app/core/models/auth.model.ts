@@ -8,5 +8,9 @@ export interface LoginResponse {
     id: string;
     email: string;
     role: 'admin' | 'student';
-    errors: string[];
+}
+
+export interface ApiError {
+  message: string;
+  errors?: { [key: string]: string[] };
 }

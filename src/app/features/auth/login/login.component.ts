@@ -6,14 +6,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/models/auth.model';
@@ -26,12 +21,7 @@ import { LoginRequest } from '../../../core/models/auth.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CardModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    MessageModule,
-    ProgressSpinnerModule,
+    RouterLink
   ],
 })
 export class LoginComponent {

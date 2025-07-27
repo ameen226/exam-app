@@ -1,71 +1,19 @@
-.login-container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-text) 100%);
-  padding: 1rem;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 400px;
-}
-
-:host ::ng-deep .login-form-card {
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  border: none;
-}
-
-:host ::ng-deep .login-form-card .p-card-header {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  padding-bottom: 0;
-}
-
-.field {
-  margin-bottom: 1.5rem;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--text-color);
-}
-
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep .p-password input {
-  border-radius: 8px;
-  border: 1px solid var(--surface-border);
-  padding: 0.75rem;
-}
-
-:host ::ng-deep .p-inputtext:focus,
-:host ::ng-deep .p-password input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb), 0.2);
-}
-
-:host ::ng-deep .p-button {
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-weight: 500;
-}
-
-:host ::ng-deep .ng-invalid.ng-touched {
-  border-color: var(--red-500) !important;
-}
-
-.p-error {
-  color: var(--red-500);
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
-:host ::ng-deep .p-message {
+.alert-danger {
   margin-bottom: 1rem;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+// Optional: Add some custom styling if needed
+.form-control:focus {
+  border-color: #6c757d;
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+.btn-dark:hover {
+  background-color: #495057;
+  border-color: #495057;
 }

@@ -13,7 +13,7 @@ export class AuthService {
     private http = inject(HttpClient);
     private router = inject(Router);
 
-    private apiUrl = 'http://localhost:5097/api';
+    private apiUrl = 'https://localhost:7198/api';
     private currentUserSubject = new BehaviorSubject<User | null>(null);
 
     public currentUser$ = this.currentUserSubject.asObservable();
@@ -70,6 +70,11 @@ export class AuthService {
     isAdmin(): boolean {
         const user = this.getCurrentUser();
         return user?.role === 'admin';
+    }
+
+    isStudent(): boolean {
+      const user = this.getCurrentUser();
+      return user?.role === 'student';
     }
 
     private handleError(error: HttpErrorResponse) {
