@@ -3,7 +3,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
@@ -12,37 +12,36 @@
   .card-body {
     padding: 2rem;
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, #5a67d8 0%, #5a3f95 100%);
+    color: #f1f1f1;
     border-radius: 12px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
     h3 {
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      color: white;
+      color: #f1f1f1; // softer than pure white
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     p {
       font-size: 1rem;
       margin-bottom: 0;
-      opacity: 0.9;
+      opacity: 0.95;
       font-weight: 500;
     }
 
-    // Success variant for passed exams
     &.success {
-      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+      background: linear-gradient(135deg, #379237 0%, #72c777 100%);
     }
 
-    // Danger variant for failed exams
     &.danger {
-      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+      background: linear-gradient(135deg, #d7233c 0%, #f05a28 100%);
     }
 
-    // Default variant styling
     &.default {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #5a67d8 0%, #5a3f95 100%);
     }
   }
 }
@@ -76,11 +75,11 @@ h2 {
 @media (max-width: 768px) {
   .stats-card .card-body {
     padding: 1.5rem;
-    
+
     h3 {
       font-size: 2rem;
     }
-    
+
     p {
       font-size: 0.9rem;
     }
@@ -92,10 +91,10 @@ h2 {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
-  
+
   .stats-card .card-body {
     padding: 1.25rem;
-    
+
     h3 {
       font-size: 1.75rem;
     }

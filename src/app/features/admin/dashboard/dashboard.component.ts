@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../../core/services/dashboard.service';
-import { DashboardStats } from '../../core/models/dashboard.model';
-import { DashboardCard } from '../../core/models/dashboard.model';
+import { DashboardService } from '../../../core/services/dashboard.service';
+import { DashboardStats } from '../../../core/models/dashboard.model';
+import { DashboardCard } from '../../../core/models/dashboard.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -49,18 +49,18 @@ export class DashboardComponent implements OnInit {
         type: 'default'
       },
       {
-        title: 'Exams Completed',
-        value: stats.examsCompleted,
+        title: 'Exams Submitted',
+        value: stats.totalExamsSubmitted,
         type: 'default'
       },
       {
         title: 'Passed Exams Number',
-        value: stats.passedExams,
+        value: stats.totalPassedExams,
         type: 'success'
       },
       {
         title: 'Failed Exams Number',
-        value: stats.failedExams,
+        value: stats.totalFailedExams,
         type: 'danger'
       }
     ];

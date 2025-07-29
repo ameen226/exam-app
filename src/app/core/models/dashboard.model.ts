@@ -1,8 +1,8 @@
 export interface DashboardStats {
     totalStudents: number;
-    examsCompleted: number;
-    passedExams: number;
-    failedExams: number;
+    totalExamsSubmitted: number;
+    totalPassedExams: number;
+    totalFailedExams: number;
 }
 
 export interface DashboardCard {

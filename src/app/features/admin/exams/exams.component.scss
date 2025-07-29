@@ -1,0 +1,110 @@
+/* src/app/features/admin/exams/exams.component.scss */
+
+// Match the exact styling from your HTML
+body {
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.main-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background-color: #f1f3f4;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    vertical-align: middle;
+    color: #6c757d;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.page-title {
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.pagination .page-link {
+    color: #6c757d;
+    border-color: #dee2e6;
+    border: none;
+    background: none;
+    
+    &:hover {
+        color: #495057;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #495057;
+    border-color: #495057;
+    color: white;
+    
+    &:hover {
+        background-color: #495057;
+        border-color: #495057;
+    }
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: transparent;
+    opacity: 0.5;
+}
+
+// Loading spinner styling
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+// Score color coding
+.text-success {
+    color: #198754 !important;
+}
+
+.text-info {
+    color: #0dcaf0 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .main-container {
+        margin: 0 0.5rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
