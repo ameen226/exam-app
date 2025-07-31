@@ -29,7 +29,17 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/exams/exams.component').then(c => c.ExamsComponent), // ← Use loadComponent for consistency
         //canActivate: [adminGuard]
     },
+    {
+        path: 'admin/create-question',
+        loadComponent: () => import('./features/admin/create-exam-question/create-exam-question.component').then(c => c.CreateExamQuestionComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
+    {
+        path: 'student/exam-history',
+        loadComponent: () => import('./features/student/exam-history/exam-history.component').then(c => c.ExamsHistoryComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
     
-  
+
     { path: '**', redirectTo: '/login' }
 ];

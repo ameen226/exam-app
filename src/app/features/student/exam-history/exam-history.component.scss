@@ -1,0 +1,92 @@
+// exams-history.component.scss
+
+body {
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.main-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.page-title {
+  color: #343a40;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.table {
+  th {
+    background-color: #f1f3f4;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+  }
+
+  td {
+    vertical-align: middle;
+    color: #6c757d;
+  }
+
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.pagination {
+  .page-link {
+    color: #6c757d;
+    border-color: #dee2e6;
+
+    &:hover {
+      color: #495057;
+      background-color: #e9ecef;
+      border-color: #dee2e6;
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: #495057;
+    border-color: #495057;
+  }
+}
+
+.score-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.score-excellent {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.score-good {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  &.score-average {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  &.score-poor {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+// Empty state
+.empty-message {
+  color: #6c757d;
+  text-align: center;
+  font-style: italic;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}

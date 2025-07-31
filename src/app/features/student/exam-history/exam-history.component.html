@@ -1,0 +1,58 @@
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+      <div class="main-container p-4">
+        <h1 class="page-title">Exams History</h1>
+
+        <ng-container *ngIf="examHistory.length > 0; else noHistory">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Subject</th>
+                  <th scope="col">Exam Time</th>
+                  <th scope="col">Exam Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let exam of examHistory">
+                  <td>{{ exam.subjectName }}</td>
+                  <td>{{ exam.startedAt | date: 'medium' }}</td>
+                  <td>
+                    <span [ngClass]="getScoreBadgeClass(exam.score)" class="score-badge">
+                      {{ exam.score }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <nav aria-label="Exam history pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <button class="page-link" (click)="changePage(currentPage - 1)">Previous</button>
+              </li>
+              <li
+                class="page-item"
+                *ngFor="let page of totalPagesArray"
+                [class.active]="page === currentPage"
+              >
+                <button class="page-link" (click)="changePage(page)">{{ page }}</button>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <button class="page-link" (click)="changePage(currentPage + 1)">Next</button>
+              </li>
+            </ul>
+          </nav>
+        </ng-container>
+
+        <ng-template #noHistory>
+          <div class="text-center p-5 text-muted">
+            <h5>Looks like no exams yet. Time to shine! ✨</h5>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
