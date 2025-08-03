@@ -1,0 +1,303 @@
+<!-- exam.component.html -->
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+      <div class="main-container p-4">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">{{ loadingMessage }}</p>
+        </div>
+
+        <!-- Error State -->
+        <div
+          *ngIf="errorMessage && !isLoading"
+          class="alert alert-danger"
+          role="alert"
+        >
+          <h4 class="alert-heading">Error</h4>
+          <p>{{ errorMessage }}</p>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="resetExam()"
+          >
+            Try Again
+          </button>
+        </div>
+
+        <!-- Subject Selection Screen -->
+        <div
+          id="subjectSelection"
+          *ngIf="
+            currentView === 'subject-selection' && !isLoading && !errorMessage
+          "
+        >
+          <h1 class="page-title">Select Exam Subject</h1>
+
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="mb-4">
+                <label for="subject" class="form-label">Choose Subject</label>
+                <select
+                  class="form-select"
+                  id="subject"
+                  [(ngModel)]="selectedSubjectId"
+                  required
+                >
+                  <option value="">Select Subject</option>
+                  <option *ngFor="let subject of subjects" [value]="subject.id">
+                    {{ subject.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  [disabled]="!selectedSubjectId || isLoading"
+                  (click)="startExam()"
+                >
+                  Start Exam
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exam Screen -->
+        <div
+          id="examScreen"
+          *ngIf="currentView === 'exam' && currentExam && !isLoading"
+        >
+          <div class="exam-header">
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <h2 class="mb-0">{{ currentExam.subjectName }} Exam</h2>
+              </div>
+              <div class="col-md-4 text-center">
+                <div class="timer" [class.warning]="isTimeWarning">
+                  {{ formattedTimeLeft }}
+                </div>
+                <small class="text-muted" *ngIf="isTimeWarning">
+                  ⚠️ Time is running out!
+                </small>
+              </div>
+              <div class="col-md-4 text-end">
+                <div class="progress" style="height: 8px">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    [style.width.%]="progressPercentage"
+                  ></div>
+                </div>
+                <small class="text-muted mt-1 d-block">
+                  Progress: {{ currentQuestionIndex + 1 }}/{{
+                    currentExam.examQuestions.length
+                  }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-container">
+            <div class="question-number">
+              Question {{ currentQuestionIndex + 1 }} of
+              {{ currentExam.examQuestions.length }}
+            </div>
+            <div class="question-text">
+              {{ currentQuestion?.text }}
+            </div>
+
+            <div id="choicesContainer">
+              <div
+                *ngFor="let answer of currentQuestion?.answers; let i = index"
+                class="choice-option"
+                [class.selected]="
+                  userAnswers[currentQuestionIndex] === answer.id
+                "
+                (click)="selectAnswer(answer.id)"
+              >
+                <input
+                  type="radio"
+                  [name]="'answer-' + currentQuestionIndex"
+                  [value]="answer.id"
+                  [id]="'choice' + getChoiceLetter(i)"
+                  [checked]="userAnswers[currentQuestionIndex] === answer.id"
+                  (change)="selectAnswer(answer.id)"
+                />
+                <label [for]="'choice' + getChoiceLetter(i)">
+                  {{ getChoiceLetter(i) }}. {{ answer.text }}
+                </label>
+              </div>
+            </div>
+
+            <div class="navigation-buttons">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                [disabled]="currentQuestionIndex === 0"
+                (click)="previousQuestion()"
+              >
+                Previous
+              </button>
+
+              <div class="d-flex gap-2">
+                <button
+                  *ngIf="
+                    currentQuestionIndex < currentExam.examQuestions.length - 1
+                  "
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="nextQuestion()"
+                >
+                  Next
+                </button>
+
+                <button
+                  *ngIf="
+                    currentQuestionIndex ===
+                    currentExam.examQuestions.length - 1
+                  "
+                  type="button"
+                  class="btn btn-success"
+                  (click)="showSubmitConfirmation()"
+                >
+                  Submit Exam
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Navigation -->
+          <div
+            class="question-navigation mt-4"
+            *ngIf="currentExam.examQuestions.length > 1"
+          >
+            <h6>Question Navigation</h6>
+            <div class="nav-grid">
+              <button
+                *ngFor="let navItem of questionNavMap"
+                type="button"
+                class="btn btn-sm nav-btn"
+                [class.btn-success]="navItem.isAnswered && !navItem.isCurrent"
+                [class.btn-primary]="navItem.isCurrent"
+                [class.btn-outline-secondary]="
+                  !navItem.isAnswered && !navItem.isCurrent
+                "
+                (click)="goToQuestion(navItem.index)"
+              >
+                {{ navItem.number }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Confirmation Modal -->
+        <!-- Angular-Friendly Submit Confirmation Modal -->
+        <div *ngIf="showSubmitModal" class="modal-backdrop-custom">
+          <div class="modal show d-block">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Submit Exam</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    (click)="hideSubmitConfirmation()"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="exam-summary">
+                    <h6>Exam Summary</h6>
+                    <ul class="list-unstyled">
+                      <li>
+                        <strong>Subject:</strong> {{ examSummary?.subjectName }}
+                      </li>
+                      <li>
+                        <strong>Total Questions:</strong>
+                        {{ examSummary?.totalQuestions }}
+                      </li>
+                      <li>
+                        <strong>Answered:</strong>
+                        {{ examSummary?.answeredQuestions }}
+                      </li>
+                      <li>
+                        <strong>Unanswered:</strong>
+                        {{ examSummary?.unansweredQuestions }}
+                      </li>
+                      <li>
+                        <strong>Time Remaining:</strong>
+                        {{ examSummary?.timeRemaining }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div
+                    *ngIf="validationResult?.warnings?.length"
+                    class="alert alert-warning"
+                  >
+                    <ul class="mb-0">
+                      <li *ngFor="let warning of validationResult?.warnings">
+                        {{ warning }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p class="mt-3">
+                    Are you sure you want to submit the exam? This action cannot
+                    be undone.
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="hideSubmitConfirmation()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    [disabled]="isSubmitting"
+                    (click)="submitExam()"
+                  >
+                    <span
+                      *ngIf="isSubmitting"
+                      class="spinner-border spinner-border-sm me-2"
+                    ></span>
+                    {{ isSubmitting ? "Submitting..." : "Submit Exam" }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" *ngIf="currentView === 'results'">
+          <div class="text-center">
+            <h1 class="page-title">Exam Completed!</h1>
+            <div class="alert alert-success" role="alert">
+              <h4 class="alert-heading">Congratulations!</h4>
+              <p>
+                You have successfully completed the
+                {{ submittedExamSubject }} exam.
+              </p>
+              <hr />
+              <p class="mb-0">Your results will be available shortly.</p>
+            </div>
+            <button type="button" class="btn btn-primary" (click)="resetExam()">
+              Take Another Exam
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

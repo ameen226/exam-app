@@ -1,61 +1,96 @@
-// src/app/core/services/exam.service.ts
+// services/exam.service.ts
 
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { ExamRecordDto, PagedResult, PaginationParameters } from '../models/exam.model';
+import { catchError } from 'rxjs/operators';
+import { CreateExamDto, ExamDto, SubjectDto, SubmitExamDto } from '../models/exam.model';
+import { Response } from '../models/Response.model';
 import { environment } from '../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private readonly baseUrl = environment.apiUrl;
 
-  getExamHistories(pagination: PaginationParameters): Observable<PagedResult<ExamRecordDto>> {
-    let params = new HttpParams()
-      .set('pageNumber', pagination.pageNumber.toString())
-      .set('pageSize', pagination.pageSize.toString());
+  constructor(private http: HttpClient) {}
 
-    return this.http.get<PagedResult<ExamRecordDto>>(`${this.apiUrl}/admin/exam/history`, { params })
+  private getHttpOptions() {
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+  }
+
+  /**
+   * Get available subjects for exam
+   */
+  getSubjects(): Observable<Response<SubjectDto[]>> {
+    return this.http.get<Response<SubjectDto[]>>(`${this.baseUrl}/student/me/subjects`)
       .pipe(
-        map(response => ({
-          ...response,
-          items: response.items.map(exam => ({
-            ...exam,
-            startedAt: new Date(exam.startedAt),
-            submitedAt: new Date(exam.submitedAt)
-          }))
-        })),
         catchError(this.handleError)
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An error occurred';
+  /**
+   * Request an exam for a specific subject
+   */
+  requestExam(createExamDto: CreateExamDto): Observable<Response<ExamDto>> {
+    return this.http.post<Response<ExamDto>>(
+      `${this.baseUrl}/me/exam/request`,
+      createExamDto,
+      this.getHttpOptions()
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Submit exam answers
+   */
+  submitExam(examId: number, submitExamDto: SubmitExamDto): Observable<Response<object>> {
+    return this.http.post<Response<object>>(
+      `${this.baseUrl}/me/exam/${examId}/submit`,
+      submitExamDto,
+      this.getHttpOptions()
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Handle HTTP errors
+   */
+  private handleError(error: any): Observable<never> {
+    let errorMessage = 'An unknown error occurred';
     
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = error.error.message;
     } else {
       // Server-side error
-      if (typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.error?.message) {
-        errorMessage = error.error.message;
-      } else if (error.status === 404) {
-        errorMessage = 'Exam histories not found';
-      } else if (error.status === 403) {
-        errorMessage = 'Access forbidden - Admin access required';
+      if (error.status === 400 && error.error) {
+        if (typeof error.error === 'string') {
+          errorMessage = error.error;
+        } else if (error.error.errors && error.error.errors.length > 0) {
+          errorMessage = error.error.errors[0];
+        } else if (error.error.message) {
+          errorMessage = error.error.message;
+        }
       } else if (error.status === 401) {
-        errorMessage = 'Unauthorized access';
-      } else if (error.status === 0) {
-        errorMessage = 'Unable to connect to server';
+        errorMessage = 'Unauthorized access. Please login again.';
+      } else if (error.status === 403) {
+        errorMessage = 'Access forbidden. You don\'t have permission.';
+      } else if (error.status === 404) {
+        errorMessage = 'Resource not found.';
+      } else if (error.status === 500) {
+        errorMessage = 'Internal server error. Please try again later.';
       }
     }
-    
-    return throwError(() => ({ message: errorMessage }));
+
+    console.error('ExamService Error:', error);
+    return throwError(() => new Error(errorMessage));
   }
 }

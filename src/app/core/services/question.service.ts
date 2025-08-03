@@ -4,7 +4,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { environment } from '../../../environment/environment';
-import { CreateQuestionDto, Subject, Response } from '../models/question.model';
+import { CreateQuestionDto, Subject } from '../models/question.model';
+import {Response} from '../models/Response.model';
 
 @Injectable({
   providedIn: 'root'

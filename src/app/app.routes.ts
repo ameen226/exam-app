@@ -39,6 +39,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/student/exam-history/exam-history.component').then(c => c.ExamsHistoryComponent), // ← Use loadComponent for consistency
         //canActivate: [adminGuard]
     },
+    {
+        path: 'student/exam',
+        loadComponent: () => import('./features/student/exam/exam.component').then(c => c.ExamComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
     
 
     { path: '**', redirectTo: '/login' }

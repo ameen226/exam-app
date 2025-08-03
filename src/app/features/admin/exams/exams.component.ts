@@ -3,7 +3,7 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { ExamService } from '../../../core/services/exam.service';
+import { ExamService } from '../../../core/services/exam-history.service';
 import { ExamRecordDto, PagedResult, PaginationParameters } from '../../../core/models/exam.model';
 
 @Component({

@@ -13,9 +13,9 @@ import {
   CreateQuestionDto,
   Difficulty,
   Subject,
-  Response,
 } from '../../../core/models/question.model';
 import { Subject as RxjsSubject, takeUntil } from 'rxjs';
+import {Response} from '../../../core/models/Response.model';
 
 @Component({
   selector: 'app-create-exam-question',

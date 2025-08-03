@@ -10,12 +10,7 @@ export interface CreateQuestionDto {
   answersList: CreateAnswerDto[];
 }
 
-export interface Response<T> {
-  success: boolean;
-  message: string;
-  errors: string[];
-  data?: T;
-}
+
 
 export enum Difficulty {
   Easy = 0,
