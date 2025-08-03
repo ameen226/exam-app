@@ -44,6 +44,21 @@ export const routes: Routes = [
         loadComponent: () => import('./features/student/exam/exam.component').then(c => c.ExamComponent), // ← Use loadComponent for consistency
         //canActivate: [adminGuard]
     },
+    {
+        path: 'admin/exam-configuration',
+        loadComponent: () => import('./features/admin/exam-configuration/exam-configuration.component').then(c => c.ExamConfigurationComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
+    {
+        path: 'student/add-subjects',
+        loadComponent: () => import('./features/student/add-subjects/add-subjects.component').then(c => c.AddSubjectsComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
+    {
+        path: 'admin/create-subject',
+        loadComponent: () => import('./features/admin/create-subject/create-subject.component').then(c => c.CreateSubjectComponent), // ← Use loadComponent for consistency
+        //canActivate: [adminGuard]
+    },
     
 
     { path: '**', redirectTo: '/login' }

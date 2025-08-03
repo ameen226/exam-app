@@ -1,0 +1,278 @@
+<!-- exam-configuration.component.html -->
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+      <div class="main-container p-4">
+        <h1 class="page-title">Exam Configuration Setup</h1>
+        
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">{{ loadingMessage }}</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="errorMessage && !isLoading" class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">Error</h4>
+          <p>{{ errorMessage }}</p>
+          <button type="button" class="btn btn-outline-danger" (click)="clearError()">
+            Dismiss
+          </button>
+        </div>
+
+        <!-- Success State -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible" role="alert">
+          <h4 class="alert-heading">Success!</h4>
+          <p>{{ successMessage }}</p>
+          <button type="button" class="btn-close" (click)="clearSuccess()"></button>
+        </div>
+        
+        <form #examConfigForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+          <!-- Subject Selection -->
+          <div class="config-section">
+            <h3 class="section-title">Subject Selection</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <label for="subject" class="form-label">Select Subject</label>
+                <select 
+                  class="form-select" 
+                  id="subject" 
+                  name="subject"
+                  [(ngModel)]="formData.subjectId" 
+                  (change)="updatePreview()"
+                  required>
+                  <option value="">Choose a subject</option>
+                  <option 
+                    *ngFor="let subject of subjects" 
+                    [value]="subject.id">
+                    {{ subject.name }}
+                  </option>
+                </select>
+                <div class="form-text">Select the subject for which you want to configure the exam</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duration Configuration -->
+          <div class="config-section">
+            <h3 class="section-title">Exam Duration</h3>
+            <div class="row">
+              <div class="col-md-4">
+                <label for="hours" class="form-label">Hours</label>
+                <div class="time-input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="hours" 
+                    name="hours"
+                    min="0" 
+                    max="5" 
+                    [(ngModel)]="formData.hours"
+                    (input)="updatePreview()"
+                    required>
+                  <span class="time-unit">hrs</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="minutes" class="form-label">Minutes</label>
+                <div class="time-input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="minutes" 
+                    name="minutes"
+                    min="0" 
+                    max="59" 
+                    [(ngModel)]="formData.minutes"
+                    (input)="updatePreview()"
+                    required>
+                  <span class="time-unit">mins</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="seconds" class="form-label">Seconds</label>
+                <div class="time-input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="seconds" 
+                    name="seconds"
+                    min="0" 
+                    max="59" 
+                    [(ngModel)]="formData.seconds"
+                    (input)="updatePreview()"
+                    required>
+                  <span class="time-unit">secs</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Duration Recommendations -->
+            <div class="alert alert-info mt-3" role="alert">
+              <strong>Recommended durations:</strong> 
+              30-60 minutes for short exams, 1-2 hours for comprehensive exams, 2-3 hours for final exams.
+            </div>
+
+            <!-- Quick Duration Presets -->
+            <div class="mt-3">
+              <h6>Quick Presets:</h6>
+              <div class="btn-group" role="group">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setDurationPreset(0, 30, 0)">
+                  30 min
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setDurationPreset(1, 0, 0)">
+                  1 hour
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setDurationPreset(1, 30, 0)">
+                  1.5 hours
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setDurationPreset(2, 0, 0)">
+                  2 hours
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Number of Questions -->
+          <div class="config-section">
+            <h3 class="section-title">Question Configuration</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <label for="numberOfQuestions" class="form-label">Number of Questions</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="numberOfQuestions" 
+                  name="numberOfQuestions"
+                  min="1" 
+                  max="200" 
+                  [(ngModel)]="formData.numberOfQuestions"
+                  (input)="updatePreview()"
+                  required>
+                <div class="form-text">Enter the total number of questions for this exam (1-200)</div>
+              </div>
+              <div class="col-md-6" *ngIf="recommendedQuestions > 0">
+                <div class="recommendation-box">
+                  <h6>💡 Recommendation</h6>
+                  <p class="mb-2">Based on your duration, we recommend <strong>{{ recommendedQuestions }}</strong> questions.</p>
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="applyRecommendedQuestions()">
+                    Apply Recommendation
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert alert-info mt-3" role="alert">
+              <strong>Question guidelines:</strong> 
+              10-20 questions for quick assessments, 20-50 for standard exams, 50+ for comprehensive evaluations.
+            </div>
+
+            <!-- Quick Question Presets -->
+            <div class="mt-3">
+              <h6>Quick Presets:</h6>
+              <div class="btn-group" role="group">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setQuestionPreset(10)">
+                  10 questions
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setQuestionPreset(20)">
+                  20 questions
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setQuestionPreset(50)">
+                  50 questions
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="setQuestionPreset(100)">
+                  100 questions
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Validation Warnings -->
+          <div *ngIf="validationWarnings.length > 0" class="config-section">
+            <div class="alert alert-warning" role="alert">
+              <h6><i class="bi bi-exclamation-triangle"></i> Configuration Warnings:</h6>
+              <ul class="mb-0">
+                <li *ngFor="let warning of validationWarnings">{{ warning }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Configuration Preview -->
+          <div class="config-section">
+            <h3 class="section-title">Configuration Preview</h3>
+            <div class="preview-card">
+              <div class="preview-title">Exam Configuration Summary</div>
+              <div class="preview-item">
+                <span class="preview-label">Subject:</span>
+                <span class="preview-value">{{ preview.subject }}</span>
+              </div>
+              <div class="preview-item">
+                <span class="preview-label">Duration:</span>
+                <span class="preview-value">{{ preview.duration }}</span>
+              </div>
+              <div class="preview-item">
+                <span class="preview-label">Number of Questions:</span>
+                <span class="preview-value">{{ preview.numberOfQuestions }}</span>
+              </div>
+              <div class="preview-item">
+                <span class="preview-label">Time per Question:</span>
+                <span class="preview-value">{{ preview.timePerQuestion }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Validation Errors -->
+          <div *ngIf="formValidation && !formValidation.isValid" class="alert alert-danger" role="alert">
+            <h6>Please fix the following errors:</h6>
+            <ul class="mb-0">
+              <li *ngFor="let error of formValidation.errors">{{ error }}</li>
+            </ul>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="row">
+            <div class="col-12 text-center">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="isSubmitting || (formValidation && !formValidation.isValid)">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isSubmitting ? 'Saving...' : 'Save Configuration' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

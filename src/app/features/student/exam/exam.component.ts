@@ -19,7 +19,7 @@ import {
 } from '../../../core/models/exam.model';
 import { CanComponentDeactivate } from '../../../core/guards/exam.guard';
 import { ExamService } from '../../../core/services/exam.service';
-import { ExamUtils } from '../../../core/utils/exam.util';
+import { ExamUtils } from '../../../core/utils/exam.utils';
 
 type ViewState = 'subject-selection' | 'exam' | 'results';
 
