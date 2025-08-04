@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  height: 100vh;
+  background-color: #f8f9fa; // Bootstrap's light gray
+}
+
+.sidebar-container {
+  width: 16rem; // same as Tailwind w-64
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.sidebar-header {
+  height: 4rem;
+  background-color: #0d6efd; // Bootstrap primary
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.sidebar-nav {
+  padding: 1rem 0.5rem;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6c757d;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.sidebar-nav a:hover {
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+.sidebar-nav a.active {
+  background-color: #e7f1ff; // Soft blue
+  color: #0d6efd;
+  border-right: 2px solid #0d6efd;
+}
+
+.sidebar-nav i {
+  margin-right: 0.75rem;
+  color: #adb5bd;
+  transition: color 0.2s;
+}
+
+.sidebar-nav a:hover i {
+  color: #6c757d;
+}
+
+.user-info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #0d6efd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+.user-details {
+  margin-left: 0.75rem;
+}
+
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #dc3545;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+}
+
+.logout-btn:hover {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-header {
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.page-welcome {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+}

@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+
+    <!-- Sidebar Layout for authenticated users -->
+    <app-sidebar *ngIf="showSidebar">
+      <router-outlet></router-outlet>
+    </app-sidebar>
+
+    <!-- Full-screen layout for auth pages -->
+    <div *ngIf="!showSidebar" class="min-h-screen bg-gray-50">
+      <router-outlet></router-outlet>
+    </div>
+  

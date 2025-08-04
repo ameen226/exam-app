@@ -30,8 +30,8 @@ export class QuestionService {
     );
   }
 
-  getSubjects(): Observable<Subject[]> {
-    return this.http.get<Subject[]>(`${environment.apiUrl}/subject`);
+  getSubjects(): Observable<Response<Subject[]>> {
+    return this.http.get<Response<Subject[]>>(`${environment.apiUrl}/subject`);
   }
 
   // Add other question-related methods here as needed

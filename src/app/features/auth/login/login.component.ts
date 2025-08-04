@@ -8,8 +8,6 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-
-
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/models/auth.model';
 
@@ -46,13 +44,17 @@ export class LoginComponent {
 
       this.authService.login(credentials).subscribe({
         next: (response) => {
+          console.log('Login response:', response);
           this.isLoading = false;
           
-          const currentUser = this.authService.getCurrentUser();
-          if (currentUser?.role === 'admin') {
+          // Use the AuthService methods instead of direct role comparison
+          if (this.authService.isAdmin()) {
             this.router.navigate(['/admin/dashboard']);
-          } else {
+          } else if (this.authService.isStudent()) {
             this.router.navigate(['/student/exam-history']);
+          } else {
+            console.error('Unknown user role');
+            this.router.navigate(['/login']);
           }
         },
         error: (error) => {

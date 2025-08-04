@@ -33,7 +33,7 @@ export class CreateExamQuestionComponent implements OnInit, OnDestroy {
   Difficulty = Difficulty;
 
   questionForm!: FormGroup;
-  subjects: Subject[] = [];
+  subjects: Subject[] | undefined = [];
   isSubmitting = false;
   successMessage = '';
   errorMessage = '';
@@ -72,8 +72,8 @@ export class CreateExamQuestionComponent implements OnInit, OnDestroy {
       .getSubjects()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (subjects) => {
-          this.subjects = subjects;
+        next: (response) => {
+          this.subjects = response.data;
         },
         error: (error) => {
           console.error('Error loading subjects:', error);
