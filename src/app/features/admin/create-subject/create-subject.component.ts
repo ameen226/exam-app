@@ -1,15 +1,25 @@
-import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { CreateSubjectService } from "../../../core/services/add-subject.service";
-import { CreateSubjectDto, SubjectDto, ValidationResult } from "../../../core/models/subject.model";
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CreateSubjectService } from '../../../core/services/add-subject.service';
+import {
+  CreateSubjectDto,
+  SubjectDto,
+  ValidationResult,
+} from '../../../core/models/subject.model';
 
 @Component({
   selector: 'app-create-subject',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './create-subject.component.html',
-  styleUrls: ['./create-subject.component.scss']
+  styleUrls: ['./create-subject.component.scss'],
 })
 export class CreateSubjectComponent implements OnInit {
   private createSubjectService = inject(CreateSubjectService);
@@ -25,12 +35,15 @@ export class CreateSubjectComponent implements OnInit {
 
   constructor() {
     this.createSubjectForm = this.fb.group({
-      subjectName: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(50),
-        Validators.pattern(/^[a-zA-Z0-9\s\-_]+$/) // Allow letters, numbers, spaces, hyphens, underscores
-      ]]
+      subjectName: new FormControl(
+        '', // ✅ No disabled here
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-Z0-9\s\-_]+$/),
+        ]
+      ),
     });
   }
 
@@ -40,18 +53,16 @@ export class CreateSubjectComponent implements OnInit {
   }
 
   setupRealTimeValidation() {
-    this.createSubjectForm.get('subjectName')?.valueChanges.subscribe(value => {
+    this.subjectNameControl?.valueChanges.subscribe((value) => {
       if (value && value.trim()) {
         const validation = this.validateSubjectName(value.trim());
-        const control = this.createSubjectForm.get('subjectName');
-        
+
         if (!validation.valid) {
-          control?.setErrors({ customError: validation.message });
-        } else if (control?.errors?.['customError']) {
-          // Remove custom error if validation passes
-          const errors = { ...control.errors };
+          this.subjectNameControl?.setErrors({ customError: validation.message });
+        } else if (this.subjectNameControl?.errors?.['customError']) {
+          const errors = { ...this.subjectNameControl.errors };
           delete errors['customError'];
-          control.setErrors(Object.keys(errors).length ? errors : null);
+          this.subjectNameControl.setErrors(Object.keys(errors).length ? errors : null);
         }
       }
     });
@@ -71,39 +82,50 @@ export class CreateSubjectComponent implements OnInit {
       error: () => {
         this.loadingSubjects = false;
         this.showError('Failed to load existing subjects');
-      }
+      },
     });
   }
 
   validateSubjectName(name: string): ValidationResult {
     const trimmedName = name.trim();
-    
+
     if (!trimmedName) {
       return { valid: false, message: 'Subject name is required' };
     }
-    
+
     if (trimmedName.length < 2) {
-      return { valid: false, message: 'Subject name must be at least 2 characters long' };
-    }
-    
-    if (trimmedName.length > 50) {
-      return { valid: false, message: 'Subject name must be less than 50 characters' };
+      return {
+        valid: false,
+        message: 'Subject name must be at least 2 characters long',
+      };
     }
 
-    // Check for invalid characters
+    if (trimmedName.length > 50) {
+      return {
+        valid: false,
+        message: 'Subject name must be less than 50 characters',
+      };
+    }
+
     if (!/^[a-zA-Z0-9\s\-_]+$/.test(trimmedName)) {
-      return { valid: false, message: 'Subject name can only contain letters, numbers, spaces, hyphens, and underscores' };
+      return {
+        valid: false,
+        message:
+          'Subject name can only contain letters, numbers, spaces, hyphens, and underscores',
+      };
     }
-    
-    // Check for duplicate names (case-insensitive)
-    const isDuplicate = this.existingSubjects.some(subject => 
-      subject.name.toLowerCase() === trimmedName.toLowerCase()
+
+    const isDuplicate = this.existingSubjects.some(
+      (subject) => subject.name.toLowerCase() === trimmedName.toLowerCase()
     );
-    
+
     if (isDuplicate) {
-      return { valid: false, message: 'A subject with this name already exists' };
+      return {
+        valid: false,
+        message: 'A subject with this name already exists',
+      };
     }
-    
+
     return { valid: true, message: '' };
   }
 
@@ -113,8 +135,8 @@ export class CreateSubjectComponent implements OnInit {
       return;
     }
 
-    const subjectName = this.createSubjectForm.get('subjectName')?.value?.trim();
-    
+    const subjectName = this.subjectNameControl?.value?.trim();
+
     if (!subjectName) {
       this.showError('Subject name is required');
       return;
@@ -127,29 +149,32 @@ export class CreateSubjectComponent implements OnInit {
     }
 
     this.submitting = true;
+    this.subjectNameControl?.disable(); // ✅ Disable properly
     this.clearMessages();
 
     const createSubjectDto: CreateSubjectDto = {
-      name: subjectName
+      name: subjectName,
     };
 
     this.createSubjectService.createSubject(createSubjectDto).subscribe({
       next: (response) => {
         this.submitting = false;
-        
+        this.subjectNameControl?.enable(); // ✅ Re-enable
+
         if (response.success) {
           this.showSuccess(`Subject "${subjectName}" created successfully!`);
           this.createSubjectForm.reset();
-          this.loadExistingSubjects(); // Refresh the list
+          this.loadExistingSubjects();
         } else {
-          const errorMsg = response.errors?.length ? response.errors[0] : response.message;
+          const errorMsg = response.errors?.[0] || response.message;
           this.showError(errorMsg || 'Failed to create subject');
         }
       },
       error: () => {
         this.submitting = false;
+        this.subjectNameControl?.enable(); // ✅ Re-enable on error
         this.showError('An unexpected error occurred');
-      }
+      },
     });
   }
 
@@ -160,10 +185,9 @@ export class CreateSubjectComponent implements OnInit {
   }
 
   private markFormGroupTouched() {
-    Object.keys(this.createSubjectForm.controls).forEach(key => {
-      const control = this.createSubjectForm.get(key);
-      control?.markAsTouched();
-    });
+    Object.values(this.createSubjectForm.controls).forEach((control) =>
+      control.markAsTouched()
+    );
   }
 
   private showSuccess(message: string) {
@@ -203,44 +227,28 @@ export class CreateSubjectComponent implements OnInit {
     this.successMessage = null;
   }
 
-  // Getter for template convenience
   get subjectNameControl() {
     return this.createSubjectForm.get('subjectName');
   }
 
-  // Check if field has specific error
   hasError(field: string, errorType: string): boolean {
     const control = this.createSubjectForm.get(field);
     return control ? control.hasError(errorType) && control.touched : false;
   }
 
-  // Get error message for field
   getErrorMessage(field: string): string {
     const control = this.createSubjectForm.get(field);
-    if (!control || !control.errors || !control.touched) {
-      return '';
-    }
+    if (!control || !control.errors || !control.touched) return '';
 
-    if (control.errors['required']) {
-      return 'Subject name is required';
-    }
-    if (control.errors['minlength']) {
-      return 'Subject name must be at least 2 characters long';
-    }
-    if (control.errors['maxlength']) {
-      return 'Subject name must be less than 50 characters';
-    }
-    if (control.errors['pattern']) {
-      return 'Subject name can only contain letters, numbers, spaces, hyphens, and underscores';
-    }
-    if (control.errors['customError']) {
-      return control.errors['customError'];
-    }
+    if (control.errors['required']) return 'Subject name is required';
+    if (control.errors['minlength']) return 'Subject name must be at least 2 characters long';
+    if (control.errors['maxlength']) return 'Subject name must be less than 50 characters';
+    if (control.errors['pattern']) return 'Subject name can only contain letters, numbers, spaces, hyphens, and underscores';
+    if (control.errors['customError']) return control.errors['customError'];
 
     return 'Invalid input';
   }
 
-  // TrackBy function for ngFor performance
   trackBySubjectId(index: number, subject: SubjectDto): number {
     return subject.id;
   }

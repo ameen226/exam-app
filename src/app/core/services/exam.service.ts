@@ -28,7 +28,7 @@ export class ExamService {
    * Get available subjects for exam
    */
   getSubjects(): Observable<Response<SubjectDto[]>> {
-    return this.http.get<Response<SubjectDto[]>>(`${this.baseUrl}/student/me/subjects`)
+    return this.http.get<Response<SubjectDto[]>>(`${this.baseUrl}/student/me/subjects/unattemped`)
       .pipe(
         catchError(this.handleError)
       );

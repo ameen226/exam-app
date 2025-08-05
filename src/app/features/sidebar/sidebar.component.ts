@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private adminNavItems: NavItem[] = [
     { label: 'Dashboard', route: '/admin/dashboard', icon: 'fas fa-tachometer-alt' },
     { label: 'Students Management', route: '/admin/students', icon: 'fas fa-users' },
-    { label: 'Exams Management', route: '/admin/exams', icon: 'fas fa-clipboard-list' },
+    { label: 'Exam Records', route: '/admin/exams', icon: 'fas fa-clipboard-list' },
     { label: 'Create Question', route: '/admin/create-question', icon: 'fas fa-plus-circle' },
     { label: 'Exam Configuration', route: '/admin/exam-configuration', icon: 'fas fa-cogs' },
     { label: 'Create Subject', route: '/admin/create-subject', icon: 'fas fa-book-open' }
